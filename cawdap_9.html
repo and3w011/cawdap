@@ -1,0 +1,1270 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Cawdap — Website revisions, not reinventions</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Big+Shoulders+Display:wght@600;700;800;900&family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&family=Fraunces:ital,opsz,wght@0,9..144,600;1,9..144,500&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --ink:#0E1B2B;
+    --ink-2:#142234;
+    --ink-3:#182a40;
+    --line:#2A3F56;
+    --line-soft:#1e3148;
+    --paper:#E7EEF3;
+    --paper-2:#dbe4ea;
+    --fg:#E8EEF4;
+    --fg-dim:#8FA4B8;
+    --amber:#FFB238;
+    --amber-dim:#7a5b1f;
+    --red:#FF5A4E;
+    --display: 'Big Shoulders Display', sans-serif;
+    --body: 'IBM Plex Sans', sans-serif;
+    --mono: 'IBM Plex Mono', monospace;
+  }
+
+  *{margin:0;padding:0;box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+
+  body{
+    background:var(--ink);
+    color:var(--fg);
+    font-family:var(--body);
+    line-height:1.5;
+    overflow-x:hidden;
+  }
+
+  @media (prefers-reduced-motion: reduce){
+    *{animation-duration:0.01ms !important; animation-iteration-count:1 !important; transition-duration:0.01ms !important; scroll-behavior:auto !important;}
+  }
+
+  a{color:inherit;}
+  img{max-width:100%;display:block;}
+
+  ::selection{background:var(--amber);color:var(--ink);}
+
+  :focus-visible{
+    outline:2px solid var(--amber);
+    outline-offset:3px;
+  }
+
+  .wrap{
+    max-width:1180px;
+    margin:0 auto;
+    padding:0 32px;
+  }
+
+  /* ---------- blueprint texture ---------- */
+  .blueprint-bg{
+    background-image:
+      linear-gradient(var(--line-soft) 1px, transparent 1px),
+      linear-gradient(90deg, var(--line-soft) 1px, transparent 1px);
+    background-size: 40px 40px;
+    background-position: -1px -1px;
+    opacity:0.35;
+    position:absolute;
+    inset:0;
+    pointer-events:none;
+  }
+
+  .crosshair{
+    position:absolute;
+    width:22px;
+    height:22px;
+    pointer-events:none;
+    opacity:0.55;
+  }
+  .crosshair::before,.crosshair::after{
+    content:"";
+    position:absolute;
+    background:var(--fg-dim);
+  }
+  .crosshair::before{ width:100%; height:1px; top:50%; left:0; }
+  .crosshair::after{ height:100%; width:1px; left:50%; top:0; }
+  .crosshair.tl{ top:14px; left:14px; }
+  .crosshair.tr{ top:14px; right:14px; }
+  .crosshair.bl{ bottom:14px; left:14px; }
+  .crosshair.br{ bottom:14px; right:14px; }
+
+  .eyebrow{
+    font-family:var(--mono);
+    font-size:12.5px;
+    letter-spacing:0.14em;
+    text-transform:uppercase;
+    color:var(--amber);
+    display:inline-flex;
+    align-items:center;
+    gap:10px;
+  }
+  .eyebrow::before{
+    content:"";
+    width:22px;
+    height:1px;
+    background:var(--amber);
+    display:inline-block;
+  }
+
+  /* ---------- header ---------- */
+  header{
+    position:sticky;
+    top:0;
+    z-index:50;
+    background:rgba(14,27,43,0.86);
+    backdrop-filter:blur(10px);
+    border-bottom:1px solid var(--line);
+  }
+  .nav{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    height:76px;
+  }
+  .logo{
+    font-family:var(--display);
+    font-weight:800;
+    font-size:26px;
+    letter-spacing:0.01em;
+    display:flex;
+    align-items:baseline;
+    gap:10px;
+  }
+  .logo .mark{
+    color:var(--amber);
+  }
+  .logo .sub{
+    font-family:var(--mono);
+    font-size:10.5px;
+    letter-spacing:0.16em;
+    color:var(--fg-dim);
+    text-transform:uppercase;
+    font-weight:500;
+  }
+  .navlinks{
+    display:flex;
+    align-items:center;
+    gap:36px;
+  }
+  .navlinks a{
+    font-family:var(--mono);
+    font-size:13px;
+    text-transform:uppercase;
+    letter-spacing:0.06em;
+    text-decoration:none;
+    color:var(--fg-dim);
+    transition:color 0.2s ease;
+  }
+  .navlinks a:hover{ color:var(--fg); }
+
+  .btn{
+    font-family:var(--mono);
+    font-size:13px;
+    letter-spacing:0.05em;
+    text-transform:uppercase;
+    padding:11px 20px;
+    border-radius:2px;
+    text-decoration:none;
+    display:inline-flex;
+    align-items:center;
+    gap:8px;
+    cursor:pointer;
+    border:1px solid transparent;
+    transition:transform 0.15s ease, background 0.2s ease, border-color 0.2s ease, color 0.2s ease;
+  }
+  .btn:active{ transform:translateY(1px); }
+  .btn-amber{
+    background:var(--amber);
+    color:var(--ink);
+    font-weight:600;
+  }
+  .btn-amber:hover{ background:#ffc35e; }
+  .btn-ghost{
+    border-color:var(--line);
+    color:var(--fg);
+  }
+  .btn-ghost:hover{ border-color:var(--fg-dim); }
+
+  .navlinks .btn{ display:none; }
+  @media (min-width:720px){ .navlinks .btn{ display:inline-flex; } }
+
+  .navlinks-mobile-cta{
+    display:inline-flex;
+  }
+  @media (min-width:720px){ .navlinks-mobile-cta{ display:none; } }
+
+  @media (max-width:719px){
+    .navlinks a:not(.btn){ display:none; }
+  }
+
+  /* ---------- hero ---------- */
+  .hero{
+    position:relative;
+    padding:88px 0 96px;
+    overflow:hidden;
+  }
+  .hero-grid{
+    display:grid;
+    grid-template-columns: 1.05fr 1fr;
+    gap:64px;
+    align-items:center;
+    position:relative;
+    z-index:2;
+  }
+  @media (max-width:940px){
+    .hero-grid{ grid-template-columns:1fr; }
+  }
+
+  .hero h1{
+    font-family:var(--display);
+    font-weight:800;
+    font-size:clamp(40px, 5.6vw, 68px);
+    line-height:0.98;
+    letter-spacing:-0.01em;
+    margin:18px 0 22px;
+  }
+  .hero h1 .strike{
+    position:relative;
+    color:var(--fg-dim);
+  }
+  .hero h1 .strike::after{
+    content:"";
+    position:absolute;
+    left:-2%;
+    right:-2%;
+    top:52%;
+    height:3px;
+    background:var(--red);
+    transform:rotate(-2deg);
+  }
+  .hero p.lede{
+    font-size:18px;
+    color:var(--fg-dim);
+    max-width:480px;
+    margin-bottom:34px;
+  }
+  .hero-ctas{
+    display:flex;
+    gap:14px;
+    flex-wrap:wrap;
+    margin-bottom:38px;
+  }
+  .btn-lg{
+    padding:15px 26px;
+    font-size:14px;
+  }
+
+  .hero-stats{
+    display:flex;
+    gap:34px;
+    font-family:var(--mono);
+    flex-wrap:wrap;
+  }
+  .hero-stats div{
+    border-left:1px solid var(--line);
+    padding-left:14px;
+  }
+  .hero-stats b{
+    display:block;
+    font-family:var(--display);
+    font-size:24px;
+    font-weight:700;
+    color:var(--fg);
+  }
+  .hero-stats span{
+    font-size:11px;
+    color:var(--fg-dim);
+    text-transform:uppercase;
+    letter-spacing:0.08em;
+  }
+
+  /* ---------- slider (signature element) ---------- */
+  .slider-card{
+    position:relative;
+  }
+  .slider-label-row{
+    display:flex;
+    justify-content:space-between;
+    font-family:var(--mono);
+    font-size:11px;
+    text-transform:uppercase;
+    letter-spacing:0.1em;
+    color:var(--fg-dim);
+    margin-bottom:8px;
+  }
+  .slider-label-row span.amber{ color:var(--amber); }
+
+  .compare{
+    position:relative;
+    width:100%;
+    aspect-ratio: 4 / 3.1;
+    border-radius:4px;
+    overflow:hidden;
+    border:1px solid var(--line);
+    box-shadow:0 30px 60px -20px rgba(0,0,0,0.55);
+    user-select:none;
+    background:#000;
+  }
+  .screen{
+    position:absolute;
+    inset:0;
+    display:flex;
+    flex-direction:column;
+  }
+  .chrome{
+    height:30px;
+    background:#0b1520;
+    display:flex;
+    align-items:center;
+    gap:6px;
+    padding:0 10px;
+    flex-shrink:0;
+    border-bottom:1px solid rgba(255,255,255,0.06);
+  }
+  .chrome i{ width:8px; height:8px; border-radius:50%; background:#33465c; display:block; }
+  .chrome .addr{
+    margin-left:10px;
+    font-family:var(--mono);
+    font-size:9.5px;
+    color:#5c7288;
+    background:#0e1c2b;
+    padding:3px 10px;
+    border-radius:3px;
+    flex:1;
+    max-width:220px;
+  }
+
+  /* BEFORE screen: deliberately chaotic */
+  .before-screen{
+    background:#3a1f52;
+    flex:1;
+    padding:14px 16px;
+    font-family: "Comic Sans MS", "Chalkboard SE", cursive;
+    overflow:hidden;
+    position:relative;
+  }
+  .before-screen .marquee{
+    background:#ffe000;
+    color:#c40000;
+    font-weight:700;
+    font-size:11px;
+    text-align:center;
+    padding:5px;
+    margin-bottom:10px;
+    border:2px dashed #c40000;
+  }
+  .before-screen h2{
+    color:#ff5ad1;
+    font-size:22px;
+    text-shadow:1px 1px 0 #00e5ff;
+    margin-bottom:6px;
+  }
+  .before-screen .badge{
+    display:inline-block;
+    background:#ff8a00;
+    color:#fff;
+    font-size:10px;
+    padding:2px 8px;
+    border-radius:10px;
+    transform:rotate(-6deg);
+    margin-bottom:8px;
+  }
+  .before-row{
+    display:flex;
+    gap:8px;
+    margin-top:10px;
+  }
+  .before-box{
+    flex:1;
+    background:#5b2f7a;
+    border:2px solid #00e5ff;
+    padding:8px;
+    font-size:9px;
+    color:#e3c7ff;
+    line-height:1.4;
+  }
+  .before-btn{
+    margin-top:10px;
+    display:inline-block;
+    background:linear-gradient(#ffdf5e,#ff8a00);
+    border:2px outset #fff;
+    color:#5a1a00;
+    font-weight:700;
+    font-size:11px;
+    padding:6px 14px;
+  }
+  .before-footer{
+    position:absolute;
+    bottom:6px;
+    left:16px;
+    right:16px;
+    font-size:6.5px;
+    color:#c9a6e8;
+    line-height:1.3;
+  }
+
+  /* AFTER screen: matches the real Penny Smart Girl redesign */
+  .after-screen{
+    background:#123B63;
+    flex:1;
+    padding:20px 22px;
+    color:#fff;
+    font-family:var(--body);
+    position:relative;
+    overflow:hidden;
+  }
+  .after-screen::before{
+    content:"";
+    position:absolute;
+    top:-30%; right:-15%;
+    width:60%; height:80%;
+    background:radial-gradient(circle, rgba(255,79,160,0.28), transparent 65%);
+    pointer-events:none;
+  }
+  .after-screen .a-eyebrow{
+    font-family:var(--mono);
+    font-size:9px;
+    letter-spacing:0.14em;
+    text-transform:uppercase;
+    color:#FF7EBB;
+    margin-bottom:8px;
+    position:relative;
+  }
+  .after-screen h2{
+    font-family:'Fraunces', Georgia, serif;
+    font-weight:600;
+    font-size:21px;
+    line-height:1.08;
+    margin-bottom:8px;
+    letter-spacing:-0.01em;
+    position:relative;
+  }
+  .after-screen h2 em{ color:#FF7EBB; font-style:italic; }
+  .after-screen p{
+    font-size:10px;
+    color:#D8E9F7;
+    max-width:75%;
+    margin-bottom:14px;
+    position:relative;
+  }
+  .after-row{
+    display:flex;
+    gap:8px;
+    position:relative;
+  }
+  .after-box{
+    flex:1;
+    background:rgba(255,255,255,0.06);
+    border:1px solid rgba(255,255,255,0.16);
+    border-radius:4px;
+    padding:9px;
+  }
+  .after-box .n{
+    font-family:var(--mono);
+    font-size:8.5px;
+    color:#FF7EBB;
+    margin-bottom:4px;
+  }
+  .after-box .t{
+    font-size:9px;
+    color:#fff;
+    font-weight:600;
+    line-height:1.25;
+  }
+  .after-btn{
+    margin-top:14px;
+    display:inline-block;
+    background:#FF4FA0;
+    color:#123B63;
+    font-family:var(--mono);
+    font-weight:600;
+    font-size:10px;
+    letter-spacing:0.04em;
+    padding:7px 14px;
+    border-radius:2px;
+    position:relative;
+  }
+
+  .compare .after-wrap{
+    position:absolute;
+    inset:0;
+    clip-path: inset(0 46% 0 0);
+  }
+  .handle{
+    position:absolute;
+    top:0;
+    bottom:0;
+    left:54%;
+    width:0;
+    z-index:5;
+    pointer-events:none;
+  }
+  .handle::before{
+    content:"";
+    position:absolute;
+    top:0; bottom:0; left:0;
+    width:2px;
+    background:var(--amber);
+    box-shadow:0 0 0 1px rgba(0,0,0,0.3);
+  }
+  .handle-grip{
+    position:absolute;
+    top:50%;
+    left:0;
+    transform:translate(-50%,-50%);
+    width:38px;
+    height:38px;
+    border-radius:50%;
+    background:var(--amber);
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    box-shadow:0 4px 14px rgba(0,0,0,0.4);
+  }
+  .handle-grip svg{ width:16px; height:16px; }
+
+  .compare input[type=range]{
+    position:absolute;
+    inset:0;
+    width:100%;
+    height:100%;
+    margin:0;
+    opacity:0;
+    cursor:ew-resize;
+    z-index:6;
+    -webkit-appearance:none;
+  }
+
+  .tag-before, .tag-after{
+    position:absolute;
+    top:38px;
+    font-family:var(--mono);
+    font-size:9px;
+    letter-spacing:0.1em;
+    text-transform:uppercase;
+    padding:3px 8px;
+    border-radius:2px;
+    z-index:4;
+  }
+  .tag-before{ left:10px; background:rgba(255,90,78,0.15); color:#ff8a80; border:1px solid rgba(255,90,78,0.4); }
+  .tag-after{ right:10px; background:rgba(255,178,56,0.15); color:var(--amber); border:1px solid rgba(255,178,56,0.4); }
+
+  .slider-hint{
+    text-align:center;
+    font-family:var(--mono);
+    font-size:10.5px;
+    color:var(--fg-dim);
+    margin-top:10px;
+  }
+
+  /* ---------- dimension divider ---------- */
+  .dim{
+    display:flex;
+    align-items:center;
+    gap:14px;
+    color:var(--fg-dim);
+    font-family:var(--mono);
+    font-size:11px;
+    letter-spacing:0.08em;
+    text-transform:uppercase;
+    padding:22px 0;
+  }
+  .dim .ln{ flex:1; height:1px; background:var(--line); position:relative; }
+  .dim .ln::before, .dim .ln::after{
+    content:"";
+    position:absolute;
+    top:-3px;
+    width:1px;
+    height:7px;
+    background:var(--line);
+  }
+  .dim .ln::before{ left:0; }
+  .dim .ln::after{ right:0; }
+
+  /* ---------- section shells ---------- */
+  section{ position:relative; padding:100px 0; }
+  .section-head{
+    max-width:640px;
+    margin-bottom:56px;
+  }
+  .section-head h2{
+    font-family:var(--display);
+    font-weight:800;
+    font-size:clamp(30px,3.6vw,44px);
+    margin-top:14px;
+    line-height:1.02;
+    letter-spacing:-0.01em;
+  }
+  .section-head p{
+    color:var(--fg-dim);
+    font-size:16px;
+    margin-top:14px;
+    max-width:560px;
+  }
+
+  /* ---------- comparison / positioning ---------- */
+  .cost-table{
+    border:1px solid var(--line);
+    border-radius:4px;
+    overflow:hidden;
+  }
+  .cost-row{
+    display:grid;
+    grid-template-columns: 2fr 1fr 1fr;
+    align-items:center;
+    padding:18px 24px;
+    border-bottom:1px solid var(--line);
+    gap:12px;
+  }
+  .cost-row:last-child{ border-bottom:none; }
+  .cost-row.head{
+    background:var(--ink-2);
+    font-family:var(--mono);
+    font-size:11px;
+    text-transform:uppercase;
+    letter-spacing:0.08em;
+    color:var(--fg-dim);
+  }
+  .cost-row .item{ font-weight:600; }
+  .cost-row .item small{
+    display:block;
+    font-weight:400;
+    color:var(--fg-dim);
+    font-size:13px;
+    margin-top:3px;
+  }
+  .cost-row .agency{
+    font-family:var(--mono);
+    color:var(--fg-dim);
+    text-decoration:line-through;
+    text-decoration-color:var(--red);
+    text-decoration-thickness:2px;
+  }
+  .cost-row .cawdap{
+    font-family:var(--mono);
+    color:var(--amber);
+    font-weight:600;
+    font-size:17px;
+  }
+  @media (max-width:640px){
+    .cost-row{ grid-template-columns:1fr 1fr; }
+    .cost-row .item{ grid-column:1 / -1; }
+  }
+
+  /* ---------- process ---------- */
+  .process-list{
+    display:flex;
+    flex-direction:column;
+  }
+  .process-item{
+    display:grid;
+    grid-template-columns: 90px 1fr;
+    gap:28px;
+    padding:32px 0;
+    border-top:1px solid var(--line);
+  }
+  .process-item:last-child{ border-bottom:1px solid var(--line); }
+  .process-num{
+    font-family:var(--display);
+    font-weight:800;
+    font-size:44px;
+    color:var(--line);
+    line-height:1;
+  }
+  .process-item h3{
+    font-family:var(--display);
+    font-weight:700;
+    font-size:22px;
+    margin-bottom:8px;
+  }
+  .process-item p{
+    color:var(--fg-dim);
+    max-width:560px;
+  }
+  .process-item .ptag{
+    font-family:var(--mono);
+    font-size:10.5px;
+    color:var(--amber);
+    text-transform:uppercase;
+    letter-spacing:0.1em;
+    margin-top:10px;
+    display:block;
+  }
+
+  /* ---------- gallery ---------- */
+  .gallery{
+    display:grid;
+    grid-template-columns:repeat(3,1fr);
+    gap:20px;
+  }
+  @media (max-width:900px){ .gallery{ grid-template-columns:1fr 1fr; } }
+  @media (max-width:600px){ .gallery{ grid-template-columns:1fr; } }
+  .gallery.gallery-single{
+    display:flex;
+    justify-content:center;
+  }
+  .gallery.gallery-single .gcard{
+    max-width:420px;
+    width:100%;
+  }
+
+  .gcard{
+    border:1px solid var(--line);
+    border-radius:4px;
+    overflow:hidden;
+    background:var(--ink-2);
+    transition:border-color 0.2s ease, transform 0.2s ease;
+  }
+  .gcard:hover{ border-color:var(--fg-dim); transform:translateY(-3px); }
+  .gcard .swatch{
+    height:120px;
+    position:relative;
+    overflow:hidden;
+  }
+  .gcard .swatch .half{
+    position:absolute;
+    top:0; bottom:0; width:50%;
+  }
+  .gcard .swatch .before-half{ left:0; background:#3a1f52; }
+  .gcard .swatch .after-half{ right:0; background:var(--paper); }
+  .gcard .swatch .div-line{
+    position:absolute;
+    left:50%; top:0; bottom:0;
+    width:1px;
+    background:var(--amber);
+  }
+  .gcard .body{ padding:18px 18px 20px; }
+  .gcard .body .k{
+    font-family:var(--mono);
+    font-size:10px;
+    letter-spacing:0.08em;
+    text-transform:uppercase;
+    color:var(--fg-dim);
+    margin-bottom:6px;
+  }
+  .gcard .body h4{
+    font-family:var(--display);
+    font-weight:700;
+    font-size:19px;
+    margin-bottom:6px;
+  }
+  .gcard .body p{
+    font-size:13.5px;
+    color:var(--fg-dim);
+  }
+  .gcard-link{
+    display:inline-flex;
+    align-items:center;
+    gap:6px;
+    margin-top:12px;
+    font-family:var(--mono);
+    font-size:11.5px;
+    letter-spacing:0.06em;
+    text-transform:uppercase;
+    color:var(--amber);
+    text-decoration:none;
+  }
+  .gcard-link:hover{ color:#ffc35e; }
+
+  /* ---------- pricing (receipt) ---------- */
+  .pricing-wrap{
+    display:grid;
+    grid-template-columns:repeat(3,1fr);
+    gap:24px;
+  }
+  @media (max-width:900px){ .pricing-wrap{ grid-template-columns:1fr; max-width:420px; margin:0 auto;} }
+
+  .receipt{
+    background:var(--paper);
+    color:#1b2836;
+    border-radius:2px;
+    padding:28px 26px 26px;
+    position:relative;
+    font-family:var(--mono);
+    box-shadow:0 20px 40px -18px rgba(0,0,0,0.5);
+  }
+  .receipt::before, .receipt::after{
+    content:"";
+    position:absolute;
+    left:0; right:0;
+    height:10px;
+    background:
+      linear-gradient(135deg, var(--ink) 50%, transparent 50%) 0 0/12px 10px repeat-x;
+  }
+  .receipt::before{ top:-1px; transform:rotate(180deg); }
+  .receipt::after{ bottom:-1px; }
+
+  .receipt .rk{
+    font-size:10px;
+    letter-spacing:0.12em;
+    text-transform:uppercase;
+    color:#8a6a2f;
+    margin-bottom:10px;
+  }
+  .receipt h3{
+    font-family:var(--display);
+    font-weight:700;
+    font-size:26px;
+    color:#152233;
+    margin-bottom:4px;
+    letter-spacing:-0.01em;
+  }
+  .receipt .price{
+    font-size:32px;
+    font-weight:600;
+    margin:14px 0 4px;
+    color:#152233;
+  }
+  .receipt .price span{ font-size:14px; color:#5c6b7c; }
+  .receipt .flat{ font-size:11px; color:#5c6b7c; margin-bottom:18px; }
+  .receipt .dashes{
+    border-top:1px dashed #9aa9b6;
+    margin:16px 0;
+  }
+  .receipt ul{
+    list-style:none;
+    display:flex;
+    flex-direction:column;
+    gap:9px;
+    margin-bottom:20px;
+  }
+  .receipt li{
+    font-size:12px;
+    display:flex;
+    justify-content:space-between;
+    color:#334252;
+  }
+  .receipt li::before{ content:"— "; color:#b3782a; }
+  .receipt .cta{
+    display:block;
+    text-align:center;
+    background:#152233;
+    color:#fff;
+    padding:12px;
+    border-radius:2px;
+    text-decoration:none;
+    font-size:12px;
+    letter-spacing:0.05em;
+    text-transform:uppercase;
+    transition:background 0.2s ease;
+  }
+  .receipt .cta:hover{ background:#233246; }
+  .receipt.featured{
+    outline:2px solid var(--amber);
+    transform:translateY(-8px);
+  }
+  .receipt .pick{
+    position:absolute;
+    top:-13px;
+    right:20px;
+    background:var(--amber);
+    color:#1b2836;
+    font-size:10px;
+    letter-spacing:0.08em;
+    padding:4px 10px;
+    border-radius:2px;
+    text-transform:uppercase;
+    font-weight:600;
+  }
+
+  /* ---------- CTA band ---------- */
+  .cta-band{
+    background:var(--ink-2);
+    border-top:1px solid var(--line);
+    border-bottom:1px solid var(--line);
+    padding:90px 0;
+    text-align:center;
+    position:relative;
+    overflow:hidden;
+  }
+  .cta-band h2{
+    font-family:var(--display);
+    font-weight:800;
+    font-size:clamp(32px,5vw,56px);
+    line-height:1.02;
+    letter-spacing:-0.01em;
+    max-width:760px;
+    margin:16px auto 30px;
+  }
+  .cta-band .amber-word{ color:var(--amber); }
+
+  /* ---------- footer ---------- */
+  footer{
+    padding:56px 0 40px;
+  }
+  .foot-grid{
+    display:flex;
+    justify-content:space-between;
+    align-items:flex-start;
+    flex-wrap:wrap;
+    gap:32px;
+    padding-bottom:36px;
+    border-bottom:1px solid var(--line);
+    margin-bottom:24px;
+  }
+  .foot-cols{
+    display:flex;
+    gap:64px;
+    flex-wrap:wrap;
+  }
+  .foot-col h5{
+    font-family:var(--mono);
+    font-size:11px;
+    text-transform:uppercase;
+    letter-spacing:0.1em;
+    color:var(--fg-dim);
+    margin-bottom:14px;
+  }
+  .foot-col a{
+    display:block;
+    text-decoration:none;
+    color:var(--fg);
+    font-size:14px;
+    margin-bottom:10px;
+    opacity:0.85;
+  }
+  .foot-col a:hover{ opacity:1; color:var(--amber); }
+  .foot-bottom{
+    display:flex;
+    justify-content:space-between;
+    flex-wrap:wrap;
+    gap:12px;
+    font-family:var(--mono);
+    font-size:11.5px;
+    color:var(--fg-dim);
+  }
+
+  /* ---------- reveal on scroll ---------- */
+  .reveal{
+    opacity:0;
+    transform:translateY(18px);
+    transition:opacity 0.7s ease, transform 0.7s ease;
+  }
+  .reveal.in{
+    opacity:1;
+    transform:translateY(0);
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="wrap nav">
+    <div class="logo">
+      <span>CAW<span class="mark">DAP</span></span>
+      <span class="sub">Website Revisions</span>
+    </div>
+    <nav class="navlinks">
+      <a href="#work">Work</a>
+      <a href="#process">Process</a>
+      <a href="#pricing">Pricing</a>
+      <a href="#contact" class="btn btn-amber">Get a quote</a>
+    </nav>
+  </div>
+</header>
+
+<main>
+
+  <!-- HERO -->
+  <section class="hero">
+    <div class="blueprint-bg"></div>
+    <span class="crosshair tl"></span>
+    <span class="crosshair tr"></span>
+    <div class="wrap hero-grid">
+      <div class="reveal in">
+        <span class="eyebrow">Rev. 01 — Full site redesign</span>
+        <h1>Same site.<br><span class="strike">Same agency quote.</span><br>Better bones, less bill.</h1>
+        <p class="lede">Cawdap rebuilds your website around what you actually want it to say — cleaner and faster, priced like a solo job, not an agency retainer.</p>
+        <div class="hero-ctas">
+          <a href="#pricing" class="btn btn-amber btn-lg">See fixed pricing</a>
+          <a href="#work" class="btn btn-ghost btn-lg">Look at the work</a>
+        </div>
+        <div class="hero-stats">
+          <div><b>6 days</b><span>Avg. turnaround</span></div>
+          <div><b>&lt; 1/6th</b><span>Of typical agency cost</span></div>
+          <div><b>1</b><span>Person doing the work — me</span></div>
+        </div>
+      </div>
+
+      <div class="slider-card">
+        <div class="slider-label-row">
+          <span>Drag to compare</span>
+          <span class="amber">Actual redesign, not a mockup</span>
+        </div>
+        <div class="compare" id="compare">
+          <div class="screen before-screen-wrap">
+            <div class="chrome"><i></i><i></i><i></i><span class="addr">pennysmartgirl.com</span></div>
+            <div class="before-screen">
+              <div class="marquee">★ NOW BOOKING — SCHEDULE YOUR APPOINTMENT ★</div>
+              <h2>Penny Smart Girl</h2>
+              <span class="badge">Est. 2012</span>
+              <div class="before-row">
+                <div class="before-box">Your partner in financial freedom — accounting, money coaching &amp; events for business owners and professionals.</div>
+                <div class="before-box">Hi, I'm Meka! Accountant, QuickBooks ProAdvisor &amp; Money Coach. Let's demystify your money woes.</div>
+              </div>
+              <div class="before-btn">☎ SCHEDULE AN APPOINTMENT</div>
+              <div class="before-footer">home  |  about  |  accounting  |  money coaching  |  events  |  blog  |  shop  |  client login  |  contact — © 2012–2021 Penny Smart Girl, LLC</div>
+            </div>
+          </div>
+
+          <div class="after-wrap" id="afterWrap">
+            <div class="screen">
+              <div class="chrome"><i></i><i></i><i></i><span class="addr">pennysmartgirl.com</span></div>
+              <div class="after-screen">
+                <div class="a-eyebrow">Accounting &amp; Money Coaching</div>
+                <h2>Run your money like a business, even if you <em>are</em> the business.</h2>
+                <p>Real bookkeeping paired with plain-English money coaching for freelancers, founders, and busy professionals.</p>
+                <div class="after-row">
+                  <div class="after-box"><div class="n">01</div><div class="t">Accounting</div></div>
+                  <div class="after-box"><div class="n">02</div><div class="t">Money Coaching</div></div>
+                  <div class="after-box"><div class="n">03</div><div class="t">Events</div></div>
+                </div>
+                <span class="after-btn">Schedule a Session →</span>
+              </div>
+            </div>
+          </div>
+
+          <span class="tag-before">Before</span>
+          <span class="tag-after">After</span>
+          <div class="handle" id="handle"><div class="handle-grip"><svg viewBox="0 0 24 24" fill="none"><path d="M8 6L2 12L8 18M16 6L22 12L16 18" stroke="#0E1B2B" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg></div></div>
+          <input type="range" min="0" max="100" value="54" id="sliderRange" aria-label="Drag to compare before and after redesign">
+        </div>
+        <div class="slider-hint">This is a real Cawdap job — brief to launch in 6 days</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- POSITIONING / COST -->
+  <section id="pricing-context">
+    <div class="wrap">
+      <div class="section-head reveal">
+        <span class="eyebrow">The estimate we're correcting</span>
+        <h2>You don't need a new building. You need the wiring fixed.</h2>
+        <p>Most agencies quote a full-site redesign like they're pouring a new foundation. Usually the foundation's fine — the layout, copy, and code just need someone to actually finish the job. That's the only thing I do.</p>
+      </div>
+
+      <div class="cost-table reveal">
+        <div class="cost-row head">
+          <div>Job</div>
+          <div>Typical agency</div>
+          <div>Cawdap</div>
+        </div>
+        <div class="cost-row">
+          <div class="item">Single landing page<small>Built around what you want it to say</small></div>
+          <div class="agency">$9,500</div>
+          <div class="cawdap">$200</div>
+        </div>
+        <div class="cost-row">
+          <div class="item">Full site rebuild<small>5–8 pages, your words, new layout</small></div>
+          <div class="agency">$28,000</div>
+          <div class="cawdap">$600</div>
+        </div>
+        <div class="cost-row">
+          <div class="item">Full custom rebuild<small>Larger site, built from a blank page to your spec</small></div>
+          <div class="agency">$41,000</div>
+          <div class="cawdap">$1,200</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div class="wrap"><div class="dim">Scale 1:1 — no discovery workshops, no brand strategy decks</div></div>
+
+  <!-- PROCESS -->
+  <section id="process">
+    <div class="wrap">
+      <div class="section-head reveal">
+        <span class="eyebrow">How a job runs</span>
+        <h2>Four steps. One person doing all of them.</h2>
+      </div>
+
+      <div class="process-list reveal">
+        <div class="process-item">
+          <div class="process-num">01</div>
+          <div>
+            <h3>Brief</h3>
+            <p>You tell me what the site needs to say and do — no template of "your" content. I ask what's missing and rough out a plan.</p>
+            <span class="ptag">Day 1</span>
+          </div>
+        </div>
+        <div class="process-item">
+          <div class="process-num">02</div>
+          <div>
+            <h3>Sketch</h3>
+            <p>A quick layout of the new site, sent for your sign-off before a single line of production code is written.</p>
+            <span class="ptag">Day 1–2</span>
+          </div>
+        </div>
+        <div class="process-item">
+          <div class="process-num">03</div>
+          <div>
+            <h3>Build</h3>
+            <p>I build the whole thing myself, page by page — a genuine rebuild around what you told me, not a copy-paste of your old site.</p>
+            <span class="ptag">Day 2–6</span>
+          </div>
+        </div>
+        <div class="process-item">
+          <div class="process-num">04</div>
+          <div>
+            <h3>Revisions &amp; handoff</h3>
+            <p>One structured round of revisions, then you get the files, credentials, and a short walkthrough. Nothing held behind a retainer.</p>
+            <span class="ptag">Day 6–8</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- WORK -->
+  <section id="work">
+    <div class="wrap">
+      <div class="section-head reveal">
+        <span class="eyebrow">Recent revisions</span>
+        <h2>The first real one.</h2>
+        <p>An actual client site, rebuilt from the ground up around what she wanted it to say — not a mockup.</p>
+      </div>
+
+      <div class="gallery gallery-single reveal">
+        <div class="gcard">
+          <div class="swatch"><div class="half before-half"></div><div class="half after-half"></div><div class="div-line"></div></div>
+          <div class="body">
+            <div class="k">Retrofit — accounting &amp; coaching site</div>
+            <h4>Penny Smart Girl</h4>
+            <p>Rebuilt pennysmartgirl.com around her three services — accounting, money coaching, and events — with one clear path to book a session.</p>
+            <a href="https://sites.google.com/view/pennysmartgirl/home" target="_blank" rel="noopener" class="gcard-link">View the rebuild ↗</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- PRICING -->
+  <section id="pricing">
+    <div class="wrap">
+      <div class="section-head reveal">
+        <span class="eyebrow">Itemized, on purpose</span>
+        <h2>Three fixed jobs. No hourly surprises.</h2>
+        <p>Pick the scope that matches what needs fixing. Every job includes the full four-step process — nothing added later.</p>
+      </div>
+
+      <div class="pricing-wrap reveal">
+        <div class="receipt">
+          <div class="rk">Job 01</div>
+          <h3>Patch</h3>
+          <div class="price">$200</div>
+          <div class="flat">Flat rate, one page</div>
+          <div class="dashes"></div>
+          <ul>
+            <li><span>Single page, built from your brief</span></li>
+            <li><span>Your existing platform</span></li>
+            <li><span>One revision round</span></li>
+            <li><span>3-day turnaround</span></li>
+          </ul>
+          <a href="#contact" class="cta">Start a patch job</a>
+        </div>
+
+        <div class="receipt featured">
+          <span class="pick">Most booked</span>
+          <div class="rk">Job 02</div>
+          <h3>Retrofit</h3>
+          <div class="price">$600</div>
+          <div class="flat">Flat rate, 5–8 pages</div>
+          <div class="dashes"></div>
+          <ul>
+            <li><span>Full site, built from your brief</span></li>
+            <li><span>Say what you want, I build it</span></li>
+            <li><span>Two revision rounds</span></li>
+            <li><span>6-day turnaround</span></li>
+          </ul>
+          <a href="#contact" class="cta">Start a retrofit</a>
+        </div>
+
+        <div class="receipt">
+          <div class="rk">Job 03</div>
+          <h3>Overhaul</h3>
+          <div class="price">$1,200</div>
+          <div class="flat">Flat rate, larger site</div>
+          <div class="dashes"></div>
+          <ul>
+            <li><span>Bigger site, built from scratch to spec</span></li>
+            <li><span>Multiple sections / page types</span></li>
+            <li><span>Three revision rounds</span></li>
+            <li><span>10-day turnaround</span></li>
+          </ul>
+          <a href="#contact" class="cta">Start an overhaul</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA BAND -->
+  <section class="cta-band" id="contact">
+    <div class="wrap">
+      <span class="eyebrow">Rev. 03 — final</span>
+      <h2>Tell me what you want the site to say.<br>I'll build it <span class="amber-word">around that</span>, not around a template.</h2>
+      <div class="hero-ctas" style="justify-content:center;">
+        <a href="mailto:cawdap01@gmail.com" class="btn btn-amber btn-lg">cawdap01@gmail.com</a>
+        <a href="#pricing" class="btn btn-ghost btn-lg">Compare jobs</a>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<footer>
+  <div class="wrap">
+    <div class="foot-grid">
+      <div>
+        <div class="logo"><span>CAW<span class="mark">DAP</span></span></div>
+        <p style="color:var(--fg-dim); font-size:13.5px; max-width:280px; margin-top:12px;">I rebuild your website around what you want it to say. Fixed price, fast turnaround, built by one person — me.</p>
+      </div>
+      <div class="foot-cols">
+        <div class="foot-col">
+          <h5>Info</h5>
+          <a href="#work">Work</a>
+          <a href="#process">Process</a>
+          <a href="#pricing">Pricing</a>
+        </div>
+        <div class="foot-col">
+          <h5>Contact</h5>
+          <a href="https://mail.google.com/mail/?view=cm&fs=1&to=cawdap01@gmail.com" target="_blank" rel="noopener">cawdap01@gmail.com</a>
+          <a href="#contact">Get a quote</a>
+        </div>
+      </div>
+    </div>
+    <div class="foot-bottom">
+      <span>© 2026 CAWDAP</span>
+      <span>REV. 03 — TERMS ON REQUEST</span>
+    </div>
+  </div>
+</footer>
+
+<script>
+  // Before/after slider
+  const range = document.getElementById('sliderRange');
+  const afterWrap = document.getElementById('afterWrap');
+  const handle = document.getElementById('handle');
+
+  function updateSlider(val){
+    afterWrap.style.clipPath = `inset(0 0 0 ${val}%)`;
+    handle.style.left = val + '%';
+  }
+  updateSlider(range.value);
+  range.addEventListener('input', (e) => updateSlider(e.target.value));
+
+  // Scroll reveal
+  const revealEls = document.querySelectorAll('.reveal');
+  const io = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if(entry.isIntersecting){
+        entry.target.classList.add('in');
+        io.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.12 });
+  revealEls.forEach(el => io.observe(el));
+</script>
+
+</body>
+</html>
